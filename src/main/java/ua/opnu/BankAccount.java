@@ -1,13 +1,22 @@
 package ua.opnu;
 
 public class BankAccount {
-    String name;
-    double balance;
-    double transactionFee;
 
-    void deposit(double amount) {
-        // TODO: modify method body
-        balance = balance + amount;
+    /**
+     * Account balance.
+     */
+    double balance;
+
+    /**
+     * The amount of the commission that is deducted from the balance
+     * each time a bank client withdraws money from the account.
+     */
+    double transactionFee = 0;
+
+     void deposit(double amount) {
+        if (amount > 0) {
+            balance = balance + amount - transactionFee;
+        }
     }
 
     double getBalance() {
@@ -15,13 +24,21 @@ public class BankAccount {
     }
 
     boolean withdraw(double amount) {
-        // TODO: modify method body
-        balance = balance - amount;
-        return true;
+        if ((amount > 0) && (balance > amount + transactionFee)) {
+            balance = balance - amount - transactionFee;
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     boolean transfer(BankAccount receiver, double amount) {
-        // TODO: modify method body
+        if ((amount > 0) && (getBalance() >= amount + this.transactionFee)) {
+            this.balance = getBalance() - amount - this.transactionFee;
+            receiver.balance += amount;
+            return true;
+        }
         return false;
     }
 }
